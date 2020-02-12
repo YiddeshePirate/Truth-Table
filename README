@@ -1,3 +1,6 @@
+# Truth Table In Python
+
+
 This is a command line program to take in logical statements and return a matching truth table
 
 The logical operators it can handle are 
