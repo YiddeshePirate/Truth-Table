@@ -1,9 +1,9 @@
-# import re
 import numpy as np
+
 from tabulate import tabulate
-from parenthasestools import getparenthasesstatement, getIndex, getreversedindex, cleartemp, loop_over_non_parentheses
-# from collections import Counter
-# from getexp import cleartemp, loop_over_non_parentheses, symbols, count
+
+from tools import getparenthasesstatement, getIndex, getreversedindex, cleartemp, loop_over_non_parentheses
+
 
 
 # This function takes in an expression and an unpacked dictionary consisting of truth values
@@ -96,57 +96,59 @@ def dict_vals(list_vals):
 
 # takes an expression, one of the columns on the table, creates list of values for it.
 def add_exp_to_dict(expression, values_dict):
+
+
     global final_table
     # get variables we are working with
     working_values = {x for x in expression if x.isalpha() == True}  
     expressions_truth_vals = []
     # convoluted way to get the range of the first list in dictionary
     for i in range(len(list(values_dict.values())[0])):
-        # get 
+        
+        # termporary dictionary of values for p
         tempdict = {j:values_dict[j][i] for j in values_dict}
-        # print(tempdict)
         expressions_truth_vals.append(truth_value(expression, **tempdict))
+
     derived_table_values[expression] = expressions_truth_vals
     return values_dict
         
 
-
+# function to get expression for rest of tables
 def get_table_names(exp):
+    # eventual list
     list_of_exp_with_symbol = []
 
     symbols = ["|", "^", ">"]
-    for symbol in symbols:
-        for i, j, k, l in zip(list(range(len(exp))), exp, exp[1:], exp[2:]):
-            # print(k)
-            if k == symbol:
-                # print(k)
-                if j == ")":
-                    starting_point = getreversedindex(exp, i)
-                    # print(starting_point)
-                else:
-                    starting_point = i
+    # iterate through list and get the index the letter before and the letter after
+    for i, j, k, l in zip(list(range(len(exp))), exp, exp[1:], exp[2:]):
 
-                if l == "(":
-                    ending_point = getIndex(exp, i+2)+1 if exp[getIndex(exp, i+1)+1] != "~" else getIndex(exp, i+2)+2
+        if k in symbols:
+            # if the symbol before was a parentheses
+            if j == ")":
+                # start the expression from the other side of parentheses
+                starting_point = getreversedindex(exp, i)
 
-                    # print(ending_point)
-                    # print(i+2)
-                    # print(exp[i+2])
-                    # print(ending_point)
-                else:
+            else:
+                starting_point = i if exp[i-1] != "~" else i-1
 
-                    ending_point = i+3 if exp[i+2] != "~" else i+4
+            if l == "(":
+                ending_point = getIndex(exp, i+2)+1
 
-                list_of_exp_with_symbol.append(exp[starting_point:ending_point])
-            elif k == "~":
-                # print("test")
-                if l == "(":
-                    # print("test")
-                    ending_point = getIndex(exp, i+2)+1
-                else:
-                    ending_point = i+3
-                starting_point=i+1
-                list_of_exp_with_symbol.append(exp[starting_point:ending_point])
+            else:
+                # if its a letter end at the letter if its a ~ sign end the next character
+                ending_point = i+3 if exp[i+2] != "~" else i+4
+
+            list_of_exp_with_symbol.append(exp[starting_point:ending_point])
+
+        elif k == "~":
+
+            if l == "(":
+                ending_point = getIndex(exp, i+2)+1
+
+            else:
+                ending_point = i+3
+            starting_point=i+1
+            list_of_exp_with_symbol.append(exp[starting_point:ending_point])
 
 
  
@@ -167,6 +169,8 @@ def making_of_a_table(statement):
     # x = making_of_a_table(statement)
 
     table = list(x.values())
+    # we currently have a dictionary with th values and rows,
+    # needed to turn it into an array to flip it to be the right format for tabulate
     table = np.array(table, dtype=bool)
     table = np.rot90(table)
     table = np.flipud(table)
@@ -178,11 +182,14 @@ def making_of_a_table(statement):
 
 
 
-expression = str(input("What is the expression?\n"))
-making_of_a_table(expression)
+expression = str(input("\nWhat is the expression you would like to make a truth table for?\n\n"))
+
+# wrapped in parentheses to make it a bit clearer for me to code
+
+making_of_a_table(f"({expression})")
  
 
 
-# print(tabulate(table, headers=x.keys()))
+
 
 
