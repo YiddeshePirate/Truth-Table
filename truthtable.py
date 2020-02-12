@@ -1,9 +1,8 @@
-import re
+# import re
 import numpy as np
 from tabulate import tabulate
-from parenthasestools import getparenthasesstatement, getIndex, getreversedindex
-from collections import Counter
-from getexp import cleartemp, loop_over_non_parentheses
+from parenthasestools import getparenthasesstatement, getIndex, getreversedindex, cleartemp, loop_over_non_parentheses
+# from collections import Counter
 # from getexp import cleartemp, loop_over_non_parentheses, symbols, count
 
 
@@ -118,6 +117,7 @@ def get_table_names(exp):
     symbols = ["|", "^", ">"]
     for symbol in symbols:
         for i, j, k, l in zip(list(range(len(exp))), exp, exp[1:], exp[2:]):
+            # print(k)
             if k == symbol:
                 # print(k)
                 if j == ")":
@@ -138,12 +138,15 @@ def get_table_names(exp):
                     ending_point = i+3 if exp[i+2] != "~" else i+4
 
                 list_of_exp_with_symbol.append(exp[starting_point:ending_point])
-            # elif k == "~":
-            #     if l == "(":
-            #         ending_point = getIndex(exp, i+2)+1
-            #     else:
-            #         ending_point = ending_point = i+3
-            #     list_of_exp_with_symbol.append(exp[starting_point:ending_point])
+            elif k == "~":
+                # print("test")
+                if l == "(":
+                    # print("test")
+                    ending_point = getIndex(exp, i+2)+1
+                else:
+                    ending_point = i+3
+                starting_point=i+1
+                list_of_exp_with_symbol.append(exp[starting_point:ending_point])
 
 
  

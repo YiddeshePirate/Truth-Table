@@ -64,5 +64,25 @@ def getparenthasesstatement(string):
 	return listof_paren
 
 
-
+def cleartemp():
+    global count, symbols
+    count = 0
+    symbols = []
+def loop_over_non_parentheses(exp):
+    global count, symbols
+    list_with_index = []
+    # print(exp)
+    for j, i in enumerate(exp):
+        # print((j, i))
+        if i == "(":
+            # print(j)
+            new_start = getIndex(exp, j)
+            expnew = exp[new_start+1:]
+            # print(exp)
+            count += new_start+1
+            loop_over_non_parentheses(expnew)
+            break
+        elif i == ">":
+            symbols.append((i, count+j))
+    return symbols
 # print(getparenthasesstatement("~(~h^(b^j))^(~h^j)"))
