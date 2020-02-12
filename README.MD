@@ -1,4 +1,4 @@
-<center> <h1>Truth Table Python 1</h1> </center>
+<center> <h1>Truth Table Python 3</h1> </center>
 
 This is a command line program to take in logical statements and return a matching truth table
 
