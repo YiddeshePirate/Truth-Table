@@ -42,6 +42,13 @@ Returns:
 | 0 | 0 | 0 | 1  | 1    | 0       | 0        |
 ```
 
+The way the table looks will be slightly different specificaly the output of
+```
+Tabulate(table, tablefmt="fancy_grid")
+```
+
+Enjoy!
+
 
 
 
