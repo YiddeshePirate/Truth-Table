@@ -64,6 +64,7 @@ def truth_value(statement, F=False, **kwargs):
         # back to a string from list
         x = " ".join(x)
         # print(x)
+        C = False
         y = eval(x)
         # print(x, y)
         return (y)
@@ -90,6 +91,7 @@ def variable_array(expression):
     # double the first period
     height = 2 * (2 ** (num_variables-1))
     # first period
+
     period = 2 ** (num_variables-1)
     # original amount of times period repeats
     sets = 1
@@ -104,6 +106,9 @@ def variable_array(expression):
         # and double the ammount of sets
         sets *= 2
         array[:, i] = full_column
+
+
+
         
 
         
@@ -111,12 +116,19 @@ def variable_array(expression):
     return array
 
 
-def dict_vals(list_vals):
+def dict_vals(expression):
+    list_vals = get_vars_from_exp(expression)
     potential_array = variable_array(list_vals)
     dict_val_table = {}
     for j, i in enumerate(list_vals):
         # print(j, i)
         dict_val_table[i] = list(potential_array[:, j])
+    
+    if "C" in expression:
+        lenofcolumn = len(dict_val_table[list(dict_val_table.keys())[0]])
+        clist = [False for x in range(lenofcolumn)]
+        dict_val_table["C"] = clist
+
     return dict_val_table
 
 # takes an expression, one of the columns on the table, creates list of values for it.
@@ -184,8 +196,9 @@ def get_table_names(exp):
 def making_of_a_table(statement):
     global derived_table_values
     variables = get_vars_from_exp(statement)
-    variables.remove("C")
-    dictionary_val = dict_vals(variables)
+    # variables.remove("C")
+    dictionary_val = dict_vals(statement)
+    # print(dictionary_val)
     derived_tables = get_table_names(statement)
     derived_table_values = {}
     for i in derived_tables:
@@ -200,7 +213,7 @@ def making_of_a_table(statement):
     table = np.array(table, dtype=bool)
     table = np.rot90(table)
     table = np.flipud(table)
-    grid = tabulate(table, headers=x.keys(), tablefmt="plain")
+    grid = tabulate(table, headers=x.keys(), tablefmt="fancy_grid")
     print(grid)
 
 
