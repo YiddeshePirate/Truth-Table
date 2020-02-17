@@ -34,14 +34,15 @@ from tools import getparenthasesstatement, getIndex, getreversedindex, cleartemp
 # not sure if I need an unpacked dictionary
 def get_vars_from_exp(expression):
     # print(expression)
-    list_vars = [x for x in expression if x.isalpha() == True]    
+    list_vars = [x for x in expression if x.isalpha()]
+    list_vars = [x for x in list_vars if x is not "C"]
     list_vars = list(set(list_vars))
     list_vars.sort()
     return list_vars
 
 
 
-def truth_value(statement, **kwargs):
+def truth_value(statement, F=False, **kwargs):
     # print(statement, kwargs)
     if ">" not in statement:
         symbols_dict = {"^":"and", "|":"or", "~":"not", "(":"(", ")":")"}
@@ -81,6 +82,8 @@ def truth_value(statement, **kwargs):
 # creates initial array with just variables
 def variable_array(expression):
     list_of_vars = [x for x in expression if x.isalpha() == True]
+    list_of_vars = [x for x in expression if x is not "C"]
+
     num_variables = set(list_of_vars)
     num_variables = len(num_variables)
     width = num_variables
@@ -181,6 +184,7 @@ def get_table_names(exp):
 def making_of_a_table(statement):
     global derived_table_values
     variables = get_vars_from_exp(statement)
+    variables.remove("C")
     dictionary_val = dict_vals(variables)
     derived_tables = get_table_names(statement)
     derived_table_values = {}
@@ -196,7 +200,7 @@ def making_of_a_table(statement):
     table = np.array(table, dtype=bool)
     table = np.rot90(table)
     table = np.flipud(table)
-    grid = tabulate(table, headers=x.keys(), tablefmt="fancy_grid")
+    grid = tabulate(table, headers=x.keys(), tablefmt="plain")
     print(grid)
 
 
