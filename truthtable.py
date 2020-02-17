@@ -213,7 +213,7 @@ def making_of_a_table(statement):
     table = np.array(table, dtype=bool)
     table = np.rot90(table)
     table = np.flipud(table)
-    grid = tabulate(table, headers=x.keys(), tablefmt="fancy_grid")
+    grid = tabulate(table, headers=x.keys(), tablefmt="plain")
     print(grid)
 
 
